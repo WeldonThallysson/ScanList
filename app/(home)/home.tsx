@@ -151,7 +151,7 @@ export default function HomeScreen() {
                   renderItem={({ item }) => (
                     <ListItems
                       data={item}
-                      newDescription=""
+                      newDescription={newDescription}
                       editingItemId={editingItemId}
                       handleDelete={(id) => handleDelete(id)}
                       handleEdit={(id) => handleEdit(id)}

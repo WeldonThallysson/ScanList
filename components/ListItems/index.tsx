@@ -29,9 +29,9 @@ export const ListItems = ({ data, editingItemId,newDescription,handleNewDescript
           </View>
         ) : (
           <>
-            {data.description && (
+            {data.description ? (
               <Text style={styles.itemText}>{data.description}</Text>
-            )}
+            ) : <Text>Adicione uma descrição</Text>}
           </>
         )}
       </View>

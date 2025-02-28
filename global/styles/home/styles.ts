@@ -77,7 +77,7 @@ export const styles = StyleSheet.create({
   },
 
   inputEdit: {
-    width: 250,
+    width: "100%",
     height: 40,
     borderColor: "#ccc",
     borderWidth: 1,
@@ -110,11 +110,14 @@ export const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
   },
+
+ 
   itemActions: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: 60,
+    marginLeft: 15
   },
   editContainer: {
     flexDirection: "row",
