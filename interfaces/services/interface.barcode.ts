@@ -1,27 +1,21 @@
-
-
- 
- 
- 
 export interface IParamsSearchAll {
-    code: string,
-    description: string
+  code?: string | null;
+  description?: string | null;
 }
 
 export interface IParamsUpdate {
-    id: number,
-    code: string,
-    description: string
+  id: number;
+  code?: string | null;
+  description?: string | null;
 }
 
-
-export interface IResponseBarcodes
-    {
-        id: number,
-        name: string,
-        email: string,
-        password: string,
-        createdAt:string,
-        updatedAt:string
-    } 
- 
+export interface IResponseBarcodes {
+  id: number;
+  code: string;
+  description: string;
+  scannedDate: string;
+  scannedAt: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+}

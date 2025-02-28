@@ -1,28 +1,28 @@
 import {
-  TextInput,
-  Button,
-  View,
-  StyleSheet,
+  TextInput, 
+  View, 
   Image,
-  Text,
-  Touchable,
+  Text, 
   TouchableOpacity,
+  ActivityIndicator,
 
 } from "react-native";
 
 import logo from "../assets/images/scaner.png";  
-import { useNavigation } from "expo-router";
 import { useHandleAuth } from "@/hooks/useHandleAuth";
-import { useState } from "react";
-import Toast from "react-native-toast-message";
+import { useEffect, useState } from "react";
+import { styles } from "@/global/styles/login/styles";
+import { getDataUser } from "@/utils/storage";
 
-export default function Page() {
+export default function  Page() {
   const [email,setEmail] = useState<string>("")
   const [password,setPassword] = useState<string>("")
 
   const {
     handleLogin,
-    router
+    router,
+    loading,
+    
   } = useHandleAuth()
 
   const handleLoginAccess = () => {
@@ -34,9 +34,26 @@ export default function Page() {
     handleLogin(data) 
   }
 
+
+  useEffect(() => {
+    const verifyAcess = async () => {
+      const token = await getDataUser();
+      return token;
+    };
+  
+    const checkAccess = async () => {
+      const token = await verifyAcess();
+      if (token?.access_token) {
+        router.push("/home");
+      }
+    };
+  
+    checkAccess();
+  }, []);
+
+
   return (
     <View style={styles.container}>
-        <Toast/>
       <View style={styles.containerImage}>
 
         <Image source={logo} style={styles.logo} />
@@ -60,9 +77,20 @@ export default function Page() {
                />
 
         <View style={styles.container_btns}>
-          <Button 
-          onPress={() => handleLoginAccess()}
-          title="Acessar" />
+
+        <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleLoginAccess()}
+            disabled={loading} // Desabilita o botão enquanto carrega
+          >
+            {loading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Acessar</Text>
+            )}
+          </TouchableOpacity>
+
+
           <TouchableOpacity
           onPress={() => {
             router.push("/register")
@@ -77,51 +105,3 @@ export default function Page() {
   );
 }
 
-const styles = StyleSheet.create({
-  
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 16,
-  },
-
-  containerImage: {
-    marginVertical: 15,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  container_btns: {
-    gap: 15
-  },
-  title: {
-    marginTop: -15,
-    fontSize: 25,
-    fontWeight: "bold",
-  },
-
-  input: {
-    height: 50,
-    borderColor: "#7e7c7c",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 12,
-    paddingHorizontal: 12,
-  },
-
-
-  btn_sub_action: {
-      width: "100%",
-      alignItems:"center",
-      justifyContent:"center"
-  },
-
-  logo: {
-    width: 150,  
-    height: 150,  
-    resizeMode: "contain", 
-  },
-  toast: {
-    zIndex: 9999,  
-  },
-});

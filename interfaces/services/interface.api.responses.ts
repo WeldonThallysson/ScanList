@@ -2,7 +2,7 @@
 
 
 export interface IResponseAuth {
-        id: string;
+        id: number;
         access_token: string
 }
 

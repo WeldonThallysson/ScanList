@@ -1,30 +1,28 @@
+import { IResponseAuth } from "@/interfaces/services/interface.api.responses";
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-// Função para salvar o token
-export const saveToken = async (token: string) => {
+export const saveDataUser = async (data: {id: number, access_token: string}) => {
   try {
-    await AsyncStorage.setItem('access_token', token);
+    await AsyncStorage.setItem('data', JSON.stringify(data));
   } catch (e) {
-    console.error('Erro ao salvar o token:', e);
+    console.error('Erro ao salvar dados do usuário:', e);
   }
 };
 
-// Função para buscar o token
-export const getToken = async (): Promise<string | null> => {
+export const getDataUser = async (): Promise<IResponseAuth | null> => {
   try {
-    const token = await AsyncStorage.getItem('access_token');
-    return token;
+    const dataUser = await AsyncStorage.getItem('data');
+    return dataUser && JSON.parse(dataUser);
   } catch (e) {
-    console.error('Erro ao buscar o token:', e);
+    console.error('Erro ao buscar os dados do usuário:', e);
     return null;
   }
 };
 
-// Função para remover o token (para logout, por exemplo)
-export const removeToken = async () => {
+export const removeUser = async () => {
   try {
-    await AsyncStorage.removeItem('access_token');
+    await AsyncStorage.removeItem('data');
   } catch (e) {
-    console.error('Erro ao remover o token:', e);
+    console.error('Erro ao remover o dados do usuário:', e);
   }
 };

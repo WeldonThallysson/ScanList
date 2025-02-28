@@ -37,8 +37,8 @@ export const updateBarCode = async ({
 }: IParamsUpdate) => {
   const data = {
     id,
-    code,
-    description,
+    ...(code && {code}),
+    ...(description && {description}),
   };
   return await api.put<IResponseMessage>("/barcodes", data);
 };

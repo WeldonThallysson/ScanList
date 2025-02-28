@@ -1,5 +1,5 @@
 
-import { getToken } from '@/utils/storage'
+import { getDataUser } from '@/utils/storage'
 import axios from 'axios'
 import Toast from 'react-native-toast-message'
 
@@ -9,9 +9,9 @@ const api = axios.create({
  
 api.interceptors.request.use(
   async (config) => {
-    const token = await getToken();
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    const dataUser = await getDataUser();
+    if (dataUser) {
+      config.headers['Authorization'] = `Bearer ${dataUser.access_token}`;
     }
     return config;
   },
