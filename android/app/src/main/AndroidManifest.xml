@@ -29,6 +29,7 @@
         <data android:scheme="myapp"/>
         <data android:scheme="com.weldon.scanlist"/>
         <data android:scheme="exp+scanlist"/>
+        <data android:scheme="com.anonymous.ScanList"/>
       </intent-filter>
     </activity>
   </application>

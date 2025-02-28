@@ -7,12 +7,14 @@ import {
   Text,
   Touchable,
   TouchableOpacity,
+
 } from "react-native";
 
 import logo from "../assets/images/scaner.png";  
 import { useNavigation } from "expo-router";
 import { useHandleAuth } from "@/hooks/useHandleAuth";
 import { useState } from "react";
+import Toast from "react-native-toast-message";
 
 export default function Page() {
   const [email,setEmail] = useState<string>("")
@@ -34,19 +36,29 @@ export default function Page() {
 
   return (
     <View style={styles.container}>
+        <Toast/>
       <View style={styles.containerImage}>
-        {/* Usando a imagem no componente Image */}
+
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>Solve Scan</Text>
       </View>
 
       <View>
-        <TextInput placeholder="Email" style={styles.input} />
-        <TextInput
-          placeholder="Senha"
-          style={styles.input}
-          secureTextEntry
-        />
+       
+            <TextInput
+                 value={email}
+                 onChangeText={(value) => setEmail(value)}
+                 placeholder="Email"
+                 style={styles.input}
+               />
+               <TextInput
+                 value={password}
+                 onChangeText={(value) => setPassword(value)}
+                 placeholder="Senha"
+                 style={styles.input}
+                 secureTextEntry
+               />
+
         <View style={styles.container_btns}>
           <Button 
           onPress={() => handleLoginAccess()}
@@ -66,6 +78,7 @@ export default function Page() {
 }
 
 const styles = StyleSheet.create({
+  
   container: {
     flex: 1,
     justifyContent: "center",
@@ -96,6 +109,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 
+
   btn_sub_action: {
       width: "100%",
       alignItems:"center",
@@ -103,8 +117,11 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 150, // Ajuste o tamanho conforme necessário
-    height: 150, // Ajuste o tamanho conforme necessário
-    resizeMode: "contain", // Para garantir que a imagem seja redimensionada corretamente
+    width: 150,  
+    height: 150,  
+    resizeMode: "contain", 
+  },
+  toast: {
+    zIndex: 9999,  
   },
 });

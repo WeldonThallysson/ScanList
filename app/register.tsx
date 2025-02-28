@@ -14,6 +14,7 @@ import logo from "../assets/images/scaner.png"; // Certifique-se de colocar o ca
 import { useNavigation } from "expo-router";
 import { useState } from "react";
 import { useHandleAuth } from "@/hooks/useHandleAuth";
+import Toast from "react-native-toast-message";
 
 export default function Page() {
   const [name, setName] = useState<string>("");
@@ -34,6 +35,7 @@ export default function Page() {
 
   return (
     <View style={styles.container}>
+      <Toast/>
       <View style={styles.containerImage}>
         {/* Usando a imagem no componente Image */}
         <Image source={logo} style={styles.logo} />
@@ -65,7 +67,7 @@ export default function Page() {
             onPress={() => {
               handleLoginAccess();
             }}
-            title="Acessar"
+            title="Cadastrar"
           />
           <TouchableOpacity
             onPress={() => {
@@ -112,6 +114,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 
+  toast: {
+    zIndex: 9999, // Valor alto para garantir que o toast fique acima de outros componentes
+  },
   btn_sub_action: {
     width: "100%",
     alignItems: "center",

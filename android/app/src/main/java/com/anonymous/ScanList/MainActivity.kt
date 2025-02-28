@@ -1,4 +1,4 @@
-package com.weldon.scanlist
+package com.anonymous.ScanList
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

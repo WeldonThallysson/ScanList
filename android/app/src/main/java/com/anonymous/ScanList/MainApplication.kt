@@ -1,4 +1,4 @@
-package com.weldon.scanlist
+package com.anonymous.ScanList
 
 import android.app.Application
 import android.content.res.Configuration
