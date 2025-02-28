@@ -13,11 +13,12 @@ import { FontAwesome } from "@expo/vector-icons";
 import { themes } from "@/global/themes";
 import { useHandleBarcodes } from "@/hooks/useHandleBarcode";
 import { IResponseBarcodes } from "@/interfaces/services/interface.barcode";
- 
+
 import { useHandleAuth } from "@/hooks/useHandleAuth";
 import { BarcodeScanningResult, Camera } from "expo-camera";
 import { styles } from "../../global/styles/home/styles";
 import { ModalScanner } from "@/components/ModalScanner";
+import { ListItems } from "@/components/ListItems";
 
 export default function HomeScreen() {
   const [filterCode, setFilterCode] = useState("");
@@ -36,23 +37,23 @@ export default function HomeScreen() {
     handleRegisterBarcode,
     handleSearchDetailsBarCode,
     handleUpdateBarCode,
-    loading
+    loading,
   } = useHandleBarcodes();
 
   const { handleLogout } = useHandleAuth();
 
   const handleScan = () => {
-    setIsModalVisible(true); 
+    setIsModalVisible(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalVisible(false); 
-    setScanned(false); 
+    setIsModalVisible(false);
+    setScanned(false);
   };
 
   const handleEdit = (id: number) => {
     setEditingItemId(id);
-    handleSearchDetailsBarCode({id})
+    handleSearchDetailsBarCode({ id });
   };
 
   const handleSave = (id: number) => {
@@ -61,10 +62,7 @@ export default function HomeScreen() {
       description: newDescription,
     };
     handleUpdateBarCode(data);
-    handleSearchAllBarCode({
-     ...(filterCode && { code: filterCode}),
-     ...(filterDescription && { description: filterDescription})
-    });
+
     setEditingItemId(null);
   };
 
@@ -75,62 +73,8 @@ export default function HomeScreen() {
   const handleBarCodeScanned = (scanning: BarcodeScanningResult) => {
     setScanned(true);
     handleRegisterBarcode({ code: scanning.data });
-    handleSearchAllBarCode({
-      ...(filterCode && { code: filterCode}),
-      ...(filterDescription && { description: filterDescription})
-     });
     handleCloseModal();
-   
   };
-
-  const renderItem = ({ item }: { item: IResponseBarcodes }) => (
-    <View style={styles.item}>
-      <View style={styles.itemContent}>
-        <Text style={styles.itemText}>Código: {item.code}</Text>
-        {editingItemId === item.id ? (
-          <View style={styles.editContainer}>
-            <TextInput
-              style={styles.inputEdit}
-              value={newDescription}
-              onChangeText={(values) => setNewDescription(values)}
-            />
-          </View>
-        ) : (
-          <>
-            {item.description && (
-              <Text style={styles.itemText}>{item.description}</Text>
-            )}
-          </>
-        )}
-      </View>
-
-      <View style={styles.itemActions}>
-        {editingItemId !== item.id ? (
-          <TouchableOpacity
-            onPress={() => handleEdit(item.id)}
-          >
-            <FontAwesome
-              name="edit"
-              size={20}
-              style={{ color: themes.colors.secondary }}
-            />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={() => handleSave(item.id)}>
-            <FontAwesome
-              name="check"
-              size={20}
-              style={{ color: themes.colors.primary }}
-            />
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity onPress={() => handleDelete(item.id)}>
-          <FontAwesome name="trash" size={20} color="red" />
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
 
   useEffect(() => {
     (async () => {
@@ -138,15 +82,14 @@ export default function HomeScreen() {
       setHasPermission(status === "granted");
     })();
 
-    handleSearchAllBarCode({})
+    handleSearchAllBarCode({});
   }, []);
 
   useEffect(() => {
-    if(detailsBarcode){
-      setNewDescription(detailsBarcode.description)
+    if (detailsBarcode) {
+      setNewDescription(detailsBarcode.description);
     }
-  },[detailsBarcode])
-
+  }, [detailsBarcode]);
 
   return (
     <>
@@ -176,23 +119,23 @@ export default function HomeScreen() {
             style={styles.input}
             placeholder="Filtrar por código"
             value={filterCode}
-            onChangeText={setFilterCode}
+            onChangeText={(values) => setFilterCode(values)}
           />
 
           <TextInput
             style={styles.input}
             placeholder="Filtrar por descrição"
             value={filterDescription}
-            onChangeText={setFilterDescription}
+            onChangeText={(values) => setFilterDescription(values)}
           />
 
           <Button
             title="Aplicar Filtro"
             onPress={() => {
               handleSearchAllBarCode({
-                ...(filterCode && { code: filterCode}),
-                ...(filterDescription && { description: filterDescription})
-               });
+                ...(filterCode && { code: filterCode }),
+                ...(filterDescription && { description: filterDescription }),
+              });
             }}
           />
         </View>
@@ -201,25 +144,35 @@ export default function HomeScreen() {
           <View>
             {dataBarcodes.length !== 0 ? (
               <View>
-                    <Text style={styles.title}>Códigos Escaneados</Text>
-                    <FlatList
-                    data={dataBarcodes}
-                    keyExtractor={(item) => String(item.id)}
-                    renderItem={renderItem}
-             />
-                </View>
+                <Text style={styles.title}>Códigos Escaneados</Text>
+                <FlatList
+                  data={dataBarcodes}
+                  keyExtractor={(item) => String(item.id)}
+                  renderItem={({ item }) => (
+                    <ListItems
+                      data={item}
+                      newDescription=""
+                      editingItemId={editingItemId}
+                      handleDelete={(id) => handleDelete(id)}
+                      handleEdit={(id) => handleEdit(id)}
+                      handleNewDescription={(item) => setNewDescription(item)}
+                      handleSave={(id) => handleSave(id)}
+                    />
+                  )}
+                />
+              </View>
             ) : (
               <Text style={styles.titleEmpty}>Nenhum Código Encontrado</Text>
             )}
-        
           </View>
         ) : (
           <View style={styles.container_loading}>
-            <ActivityIndicator size={"large"}/>
-            <Text style={styles.loading_text}>Carregando Códigos Escaneados...</Text>
+            <ActivityIndicator size={"large"} />
+            <Text style={styles.loading_text}>
+              Carregando Códigos Escaneados...
+            </Text>
           </View>
         )}
-        
       </View>
 
       <ModalScanner
@@ -227,7 +180,7 @@ export default function HomeScreen() {
         handleBarCodeScanned={handleBarCodeScanned}
         handleCloseModal={handleCloseModal}
         isModalVisible={isModalVisible}
-       />
+      />
     </>
   );
 }

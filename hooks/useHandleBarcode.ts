@@ -23,6 +23,7 @@ export const useHandleBarcodes = () => {
       const response = await registerBarCode(code);
       const message = response.data.message;
       if (message) {
+        handleSearchAllBarCode({});
         Toast.show({
           type: "success",
           position: "top",
@@ -66,13 +67,14 @@ export const useHandleBarcodes = () => {
     try {
       const response = await updateBarCode({ id, code, description });
       const message = response.data.message;
+
       if (message) {
         Toast.show({
           type: "success",
           position: "top",
           text1: message,
         });
-     
+      handleSearchAllBarCode({})
 
       }
     } catch (error) {
