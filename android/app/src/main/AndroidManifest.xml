@@ -27,9 +27,8 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.weldon.scanlist"/>
-        <data android:scheme="exp+scanlist"/>
         <data android:scheme="com.anonymous.ScanList"/>
+        <data android:scheme="exp+scanlist"/>
       </intent-filter>
     </activity>
   </application>
